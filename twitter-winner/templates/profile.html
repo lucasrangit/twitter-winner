@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block main %}
+  <h2>this is you</h2>
+  <div class="media">
+    <div class="img avatar">
+      <img src="{{ user.avatar_url }}">
+    </div>
+    <div class="body">
+      <h1 style="margin-top: 0; padding-top: 0">{{ user.name }}</h1>
+      <p><a href="{{ user.link }}" target="_blank" rel="nofollow">{{ user.link }}</a></p>
+    </div>
+  </div>
+
+
+  <h2>webapp2 auth session</h2>
+  <table>
+    <tbody>
+      {% for k, v in session.items() -%}
+        <tr>
+          <td style="padding-right: 5px">{{ k }}:</td>
+          <td>{{ v }}</td>
+        </tr>
+      {% endfor -%}
+    </tbody>
+  </table>
+  
+  <p style="margin-top: 2em;">
+    <a href="/logout" class="btn">logout</a>
+  </p>
+{% endblock %}
