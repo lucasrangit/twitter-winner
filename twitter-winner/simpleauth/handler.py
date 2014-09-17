@@ -81,6 +81,9 @@ class SimpleAuthHandler(object):
     'facebook'    : ('oauth2',
       'https://www.facebook.com/dialog/oauth?{0}',
       'https://graph.facebook.com/oauth/access_token'),
+    'linkedin2'   : ('oauth2',
+      'https://www.linkedin.com/uas/oauth2/authorization?{0}',
+      'https://www.linkedin.com/uas/oauth2/accessToken'),
     'linkedin'    : ('oauth1', {
       'request': 'https://api.linkedin.com/uas/oauth/requestToken', 
       'auth'   : 'https://www.linkedin.com/uas/oauth/authenticate?{0}'
@@ -89,6 +92,9 @@ class SimpleAuthHandler(object):
        'request': 'https://api.twitter.com/oauth/request_token', 
        'auth'   : 'https://api.twitter.com/oauth/authenticate?{0}'
     },            'https://api.twitter.com/oauth/access_token'),
+    'foursquare': ('oauth2',
+       'https://foursquare.com/oauth2/authenticate?{0}',
+       'https://foursquare.com/oauth2/access_token'),
     'openid'      : ('openid', None)
   }
   
@@ -96,8 +102,10 @@ class SimpleAuthHandler(object):
   TOKEN_RESPONSE_PARSERS = {
     'google'      : '_json_parser',
     'windows_live': '_json_parser',
+    'foursquare'  : '_json_parser',
     'facebook'    : '_query_string_parser',
     'linkedin'    : '_query_string_parser',
+    'linkedin2'    : '_json_parser',
     'twitter'     : '_query_string_parser'
   }
 
@@ -352,13 +360,16 @@ class SimpleAuthHandler(object):
   def _get_google_user_info(self, auth_info, key=None, secret=None):
     """Returns a dict of currenly logging in user.
     Google API endpoint:
-    https://www.googleapis.com/oauth2/v1/userinfo
+    https://www.googleapis.com/oauth2/v3/userinfo
     """
     resp = self._oauth2_request(
-      'https://www.googleapis.com/oauth2/v1/userinfo?{0}', 
+      'https://www.googleapis.com/oauth2/v3/userinfo?{0}',
       auth_info['access_token']
     )
-    return json.loads(resp)
+    data = json.loads(resp)
+    if 'id' not in data and 'sub' in data:
+      data['id'] = data['sub']
+    return data
     
   def _get_windows_live_user_info(self, auth_info, key=None, secret=None):
     """Windows Live API user profile endpoint.
@@ -382,6 +393,20 @@ class SimpleAuthHandler(object):
                                 auth_info['access_token'])
     return json.loads(resp)
     
+  def _get_foursquare_user_info(self, auth_info, key=None, secret=None):
+    """Returns a dict of currenly logging in user.
+    foursquare API endpoint:
+    https://api.foursquare.com/v2/users/self
+    """
+    resp = self._oauth2_request(
+      'https://api.foursquare.com/v2/users/self?{0}&v=20130204',
+      auth_info['access_token'],'oauth_token'
+    )
+    data = json.loads(resp)
+    if data['meta']['code'] != 200:
+      logging.error(data['meta']['errorDetail'])
+    return data['response'].get('user')
+
   def _get_linkedin_user_info(self, auth_info, key=None, secret=None):
     """Returns a dict of currently logging in linkedin user.
 
@@ -391,16 +416,13 @@ class SimpleAuthHandler(object):
     http://api.linkedin.com/v1/people/~:<fields>
     where <fields> is something like
     (id,first-name,last-name,picture-url,public-profile-url,headline)
-    """
-    try:
-        # already in the App Engine libs, see app.yaml on how to specify
-        # libraries need this for providers like LinkedIn
-        from lxml import etree
-    except ImportError:
-        logging.error('requirement `lxml.etree` was not provided. please '
-                      'make sure you have enabled it in app.yaml')
-        raise
 
+    LinkedIn OAuth 1.0a is deprecated. Use LinkedIn with OAuth 2.0
+    """
+    # TODO: remove LinkedIn OAuth 1.0a in the next release.
+    logging.warn('LinkedIn OAuth 1.0a is deprecated. '
+                  'Use LinkedIn with OAuth 2.0: '
+                  'https://developer.linkedin.com/documents/authentication')
     token = oauth1.Token(key=auth_info['oauth_token'], 
                          secret=auth_info['oauth_token_secret'])
     client = self._oauth1_client(token, key, secret)
@@ -408,24 +430,47 @@ class SimpleAuthHandler(object):
     fields = 'id,first-name,last-name,picture-url,public-profile-url,headline'
     url = 'http://api.linkedin.com/v1/people/~:(%s)' % fields
     resp, content = client.request(url)
-    
+    return self._parse_xml_user_info(content)
+
+  def _get_linkedin2_user_info(self, auth_info, key=None, secret=None):
+    """Returns a dict of currently logging in linkedin user.
+
+    LinkedIn user profile API endpoint:
+    http://api.linkedin.com/v1/people/~
+    or
+    http://api.linkedin.com/v1/people/~:<fields>
+    where <fields> is something like
+    (id,first-name,last-name,picture-url,public-profile-url,headline)
+    """
+    fields = 'id,first-name,last-name,picture-url,public-profile-url,headline'
+    url = 'https://api.linkedin.com/v1/people/~:(%s)?{0}' % fields
+    resp = self._oauth2_request(url, auth_info['access_token'],
+                                token_param='oauth2_access_token')
+    return self._parse_xml_user_info(resp)
+
+  def _parse_xml_user_info(self, content):
+    try:
+      # lxml is one of the third party libs available on App Engine out of the
+      # box. See example/app.yaml for more info.
+      from lxml import etree
+    except ImportError:
+      import xml.etree.ElementTree as etree
     person = etree.fromstring(content)
     uinfo = {}
     for e in person:
       uinfo.setdefault(e.tag, e.text)
-    
     return uinfo
     
   def _get_twitter_user_info(self, auth_info, key=None, secret=None):
     """Returns a dict of twitter user using
-    https://api.twitter.com/1/account/verify_credentials.json
+    https://api.twitter.com/1.1/account/verify_credentials.json
     """
     token = oauth1.Token(key=auth_info['oauth_token'],
                          secret=auth_info['oauth_token_secret'])
     client = self._oauth1_client(token, key, secret)
     
     resp, content = client.request(
-      'https://api.twitter.com/1/account/verify_credentials.json'
+      'https://api.twitter.com/1.1/account/verify_credentials.json'
     )
     uinfo = json.loads(content)
     uinfo.setdefault('link', 'http://twitter.com/%s' % uinfo['screen_name'])
@@ -444,11 +489,11 @@ class SimpleAuthHandler(object):
     
     return oauth1.Client(*args)
   
-  def _oauth2_request(self, url, token):
+  def _oauth2_request(self, url, token, token_param='access_token'):
     """Makes an HTTP request with OAuth 2.0 access token using App Engine 
     URLfetch API.
     """
-    target_url = url.format(urlencode({'access_token':token}))
+    target_url = url.format(urlencode({token_param:token}))
     return urlfetch.fetch(target_url).content
     
   def _query_string_parser(self, body):
