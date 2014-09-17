@@ -125,9 +125,34 @@ class RetweetsHandler(BaseRequestHandler):
   def get(self):
     """Handles GET /retweets"""    
     if self.logged_in:
+      user = self.current_user
+
+      # OAuth process, using the keys and tokens
+      auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+      auth.set_access_token(user.access_token, user.access_token_secret)
+        
+      # Creation of the actual interface, using authentication
+      api = tweepy.API(auth)
+      
+      retweets_of_me = api.retweets_of_me()
+      tweets = list()
+      for tweet in retweets_of_me:
+          tweets.append(tweet)
+
+      random_number = random.randint(0, len(tweets)-1)
+      winning_retweet = tweets[random_number]
+
+      retweets = api.retweets(winning_retweet.id)
+      
+      random_number = random.randint(0, len(retweets)-1)
+      winner = retweets[random_number].user
+
       self.render('retweets.html', {
-        'user': self.current_user, 
-        'session': self.auth.get_user_by_session()
+        'user': user,
+        'session': self.auth.get_user_by_session(),
+        'retweets': tweets,
+        'winning_retweet': winning_retweet,
+        'winner': winner,
       })
     else:
       self.redirect('/')
@@ -243,8 +268,7 @@ class AuthHandler(BaseRequestHandler, SimpleAuthHandler):
     self.session.add_flash(data, 'data - from _on_signin(...)')
     self.session.add_flash(auth_info, 'auth_info - from _on_signin(...)')
 
-    # Go to the profile page
-    self.redirect('/profile')
+    self.redirect('/')
 
   def logout(self):
     self.auth.unset_session()

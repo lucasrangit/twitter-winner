@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block main %}
+  <h2>You</h2>
+  <div class="media">
+    <div class="img avatar">
+      <img src="{{ user.avatar_url }}">
+    </div>
+    <div class="body">
+      <h1 style="margin-top: 0; padding-top: 0">{{ user.name }}</h1>
+      <p><a href="{{ user.link }}" target="_blank" rel="nofollow">{{ user.link }}</a></p>
+    </div>
+  </div>
+
+  <h2>Winning Retweet</h2>
+  <ul>
+      <li>{{ winning_retweet.text }}</li>
+  </ul>
+
+  <h2>Winner</h2>
+  <ul>
+      <li>{{ winner.screen_name }}</li>
+  </ul>
+
+  <h2>Retweets</h2>
+  <ol>
+      {% for retweet in retweets %}
+        <li>({{ retweet.retweet_count }}x) {{ retweets.text }}</li>
+      {% endfor %}
+  </ol>
+  
+  <p style="margin-top: 2em;">
+    <a href="/logout" class="btn">logout</a>
+  </p>
+{% endblock %}
