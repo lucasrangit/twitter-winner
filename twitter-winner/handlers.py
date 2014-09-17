@@ -8,6 +8,13 @@ from jinja2.runtime import TemplateNotFound
 
 from simpleauth import SimpleAuthHandler
 
+import tweepy
+import random
+
+# Consumer keys and access tokens, used for OAuth
+consumer_key = secrets.consumer_key
+consumer_secret = secrets.consumer_secret
+
 
 class BaseRequestHandler(webapp2.RequestHandler):
   def dispatch(self):
@@ -79,6 +86,46 @@ class ProfileHandler(BaseRequestHandler):
     """Handles GET /profile"""    
     if self.logged_in:
       self.render('profile.html', {
+        'user': self.current_user, 
+        'session': self.auth.get_user_by_session()
+      })
+    else:
+      self.redirect('/')
+
+class FollowersHandler(BaseRequestHandler):
+  def get(self):
+    """Handles GET /followers"""    
+    if self.logged_in:
+      user = self.current_user
+
+      # OAuth process, using the keys and tokens
+      auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+      auth.set_access_token(user.access_token, user.access_token_secret)
+        
+      # Creation of the actual interface, using authentication
+      api = tweepy.API(auth)
+      
+      followers = list()
+      for follower in tweepy.Cursor(api.followers).items():
+          followers.append(follower)
+
+      random_number = random.randint(0, len(followers)-1)
+      winner = followers[random_number]
+
+      self.render('followers.html', {
+        'user': user,
+        'session': self.auth.get_user_by_session(),
+        'followers': followers,
+        'winner': winner,
+      })
+    else:
+      self.redirect('/')
+
+class RetweetsHandler(BaseRequestHandler):
+  def get(self):
+    """Handles GET /retweets"""    
+    if self.logged_in:
+      self.render('retweets.html', {
         'user': self.current_user, 
         'session': self.auth.get_user_by_session()
       })
@@ -158,6 +205,8 @@ class AuthHandler(BaseRequestHandler, SimpleAuthHandler):
       # In a real app you could compare _attrs with user's properties fetched
       # from the datastore and update local user in case something's changed.
       user.populate(**_attrs)
+      user.access_token = auth_info['oauth_token']  
+      user.access_token_secret = auth_info['oauth_token_secret']
       user.put()
       self.auth.set_session(
         self.auth.store.user_to_dict(user))
@@ -172,6 +221,8 @@ class AuthHandler(BaseRequestHandler, SimpleAuthHandler):
         
         u = self.current_user
         u.populate(**_attrs)
+        user.access_token = auth_info['oauth_token']  
+        user.access_token_secret = auth_info['oauth_token_secret']
         # The following will also do u.put(). Though, in a real app
         # you might want to check the result, which is
         # (boolean, info) tuple where boolean == True indicates success
@@ -182,6 +233,9 @@ class AuthHandler(BaseRequestHandler, SimpleAuthHandler):
         logging.info('Creating a brand new user')
         ok, user = self.auth.store.user_model.create_user(auth_id, **_attrs)
         if ok:
+          user.access_token = auth_info['oauth_token']  
+          user.access_token_secret = auth_info['oauth_token_secret']
+          user.put()
           self.auth.set_session(self.auth.store.user_to_dict(user))
 
     # Remember auth data during redirect, just for this demo. You wouldn't

@@ -4,7 +4,11 @@
   <p>Use your Twitter data to randomly pick a winner. Useful for conducting contests and giveaways.</p>
   {% if logged_in %}
     <p>Hey there. Looks like you're logged in already.</p>
-    <a href="{{ url_for('profile') }}" class="btn">my profile</a>
+    <a href="{{ url_for('profile') }}" class="btn">Profile</a>
+    <p>Pick a winner from your list of followers:</p>
+    <a href="/followers" class="btn">Followers</a>
+    <p>Pick a winner from your retweets:</p>
+    <a href="retweets" class="btn">Retweets</a>
     <a href="/logout" class="btn">logout</a>
   {% else %}
     <p>Please login to continue:</p>
