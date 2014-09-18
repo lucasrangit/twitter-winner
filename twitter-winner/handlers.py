@@ -265,8 +265,8 @@ class AuthHandler(BaseRequestHandler, SimpleAuthHandler):
 
     # Remember auth data during redirect, just for this demo. You wouldn't
     # normally do this.
-    self.session.add_flash(data, 'data - from _on_signin(...)')
-    self.session.add_flash(auth_info, 'auth_info - from _on_signin(...)')
+    #self.session.add_flash(data, 'data - from _on_signin(...)')
+    #self.session.add_flash(auth_info, 'auth_info - from _on_signin(...)')
 
     self.redirect('/')
 
