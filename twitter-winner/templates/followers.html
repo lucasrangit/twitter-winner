@@ -11,6 +11,10 @@
       <p><a href="{{ user.link }}" target="_blank" rel="nofollow">{{ user.link }}</a></p>
     </div>
   </div>
+  
+  {% if incomplete_list %}
+    <div class="alert alert-danger" role="alert">Your list of following is incomplete due to Twitter API rate limitations!</div>
+  {% endif %}
 
   <h2>Winner</h2>
   <ul>

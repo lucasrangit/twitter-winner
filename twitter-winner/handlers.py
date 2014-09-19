@@ -10,6 +10,7 @@ from simpleauth import SimpleAuthHandler
 
 import tweepy
 import random
+from tweepy.error import TweepError
 
 # Consumer keys and access tokens, used for OAuth
 consumer_key = secrets.consumer_key
@@ -104,11 +105,18 @@ class FollowersHandler(BaseRequestHandler):
         
       # Creation of the actual interface, using authentication
       api = tweepy.API(auth)
-      
-      followers = list()
-      for follower in tweepy.Cursor(api.followers).items():
-          followers.append(follower)
 
+      followers = list()
+      list_incomplete = false
+      try:
+          for follower in tweepy.Cursor(api.followers).items():
+              followers.append(follower)
+      except TweepError as e:
+          logging.error(e)
+          limits = api.rate_limit_status('statuses')
+          logging.info(limits)
+          incomplete_list = true
+          
       random_number = random.randint(0, len(followers)-1)
       winner = followers[random_number]
 
@@ -117,6 +125,7 @@ class FollowersHandler(BaseRequestHandler):
         'session': self.auth.get_user_by_session(),
         'followers': followers,
         'winner': winner,
+        'incomplete_list': incomplete_list,
       })
     else:
       self.redirect('/')
