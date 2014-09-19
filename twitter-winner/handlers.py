@@ -126,6 +126,7 @@ class RetweetsHandler(BaseRequestHandler):
     """Handles GET /retweets"""    
     if self.logged_in:
       user = self.current_user
+      tweet_id = self.request.get("id")
 
       # OAuth process, using the keys and tokens
       auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -134,26 +135,28 @@ class RetweetsHandler(BaseRequestHandler):
       # Creation of the actual interface, using authentication
       api = tweepy.API(auth)
       
-      retweets_of_me = api.retweets_of_me()
-      tweets = list()
-      for tweet in retweets_of_me:
-          tweets.append(tweet)
-
-      random_number = random.randint(0, len(tweets)-1)
-      winning_retweet = tweets[random_number]
-
-      retweets = api.retweets(winning_retweet.id)
-      
-      random_number = random.randint(0, len(retweets)-1)
-      winner = retweets[random_number].user
-
-      self.render('retweets.html', {
-        'user': user,
-        'session': self.auth.get_user_by_session(),
-        'retweets': tweets,
-        'winning_retweet': winning_retweet,
-        'winner': winner,
-      })
+      if not tweet_id:
+          retweets_list = list()
+          for tweet in api.retweets_of_me():
+              retweets_list.append(tweet)
+          
+          self.render('retweets.html', {
+            'user': user,
+            'session': self.auth.get_user_by_session(),
+            'retweets': retweets_list,
+          })
+      else:
+          retweet = api.get_status(tweet_id)
+          retweeters = api.retweeters(tweet_id)
+          random_number = random.randint(0, len(retweeters)-1)
+          winner = api.get_user(retweeters[random_number])
+    
+          self.render('retweets.html', {
+            'user': user,
+            'session': self.auth.get_user_by_session(),
+            'winner': winner,
+            'retweet': retweet,
+          })
     else:
       self.redirect('/')
 

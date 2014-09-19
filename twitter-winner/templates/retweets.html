@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 
 {% block main %}
-  <h2>You</h2>
   <div class="media">
     <div class="img avatar">
       <img src="{{ user.avatar_url }}">
@@ -12,22 +11,33 @@
     </div>
   </div>
 
-  <h2>Winning Retweet</h2>
-  <ul>
-      <li>{{ winning_retweet.text }}</li>
-  </ul>
+  {% if winner %}
+	  <h2>Winner</h2>
+	  <ul>
+	      <li>{{ winner.screen_name }}</li>
+	  </ul>
 
-  <h2>Winner</h2>
-  <ul>
-      <li>{{ winner.screen_name }}</li>
-  </ul>
+	  <h2>Winning Retweet</h2>
+	  <ul>
+	      <li>{{ retweet.text }}</li>
+	  </ul>
+  {% endif %}
 
-  <h2>Retweets</h2>
-  <ol>
-      {% for retweet in retweets %}
-        <li>({{ retweet.retweet_count }}x) {{ retweets.text }}</li>
-      {% endfor %}
-  </ol>
+  {% if retweets %}
+    <h2>Retweets</h2>
+    <p>Pick a retweet:</p>
+    <table>
+      <tbody>
+	      {% for retweet in retweets %}
+				  <tr>
+				    <td><a href="/retweets?id={{retweet.id}}">#{{loop.index}}</a>
+	          <td style="padding-right: 5px">{{ retweet.retweet_count }}x</td>
+	          <td>{{ retweet.text }}</td>
+		      </tr>
+	      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
   
   <p style="margin-top: 2em;">
     <a href="/logout" class="btn">logout</a>
