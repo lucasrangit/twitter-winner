@@ -107,7 +107,7 @@ class FollowersHandler(BaseRequestHandler):
       api = tweepy.API(auth)
 
       followers = list()
-      list_incomplete = False
+      incomplete_list = False
       try:
           for follower in tweepy.Cursor(api.followers).items():
               followers.append(follower)
