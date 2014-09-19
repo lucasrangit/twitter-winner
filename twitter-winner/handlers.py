@@ -107,7 +107,7 @@ class FollowersHandler(BaseRequestHandler):
       api = tweepy.API(auth)
 
       followers = list()
-      list_incomplete = false
+      list_incomplete = False
       try:
           for follower in tweepy.Cursor(api.followers).items():
               followers.append(follower)
@@ -115,7 +115,7 @@ class FollowersHandler(BaseRequestHandler):
           logging.error(e)
           limits = api.rate_limit_status('statuses')
           logging.info(limits)
-          incomplete_list = true
+          incomplete_list = True
           
       random_number = random.randint(0, len(followers)-1)
       winner = followers[random_number]
