@@ -109,7 +109,9 @@ class FollowersHandler(BaseRequestHandler):
       followers = list()
       incomplete_list = False
       try:
-          for follower in tweepy.Cursor(api.followers).items():
+          # the maximum per request is 200 according to 
+          # https://dev.twitter.com/rest/reference/get/followers/list
+          for follower in tweepy.Cursor(api.followers,count=200).items():
               followers.append(follower)
       except TweepError as e:
           logging.error(e)
