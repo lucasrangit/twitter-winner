@@ -80,14 +80,20 @@ class BaseRequestHandler(webapp2.RequestHandler):
 class RootHandler(BaseRequestHandler):
   def get(self):
     """Handles default landing page"""
-    self.render('home.html')
+    if self.logged_in:
+        self.render('home.html', {
+        'user': self.current_user,
+        'session': self.auth.get_user_by_session()
+      })
+    else:
+        self.render('home.html')
     
 class ProfileHandler(BaseRequestHandler):
   def get(self):
     """Handles GET /profile"""    
     if self.logged_in:
       self.render('profile.html', {
-        'user': self.current_user, 
+        'user': self.current_user,
         'session': self.auth.get_user_by_session()
       })
     else:

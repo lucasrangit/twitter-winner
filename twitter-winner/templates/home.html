@@ -1,20 +1,25 @@
 {% extends "layout.html" %}
 
 {% block main %}
-  <p>Use your Twitter data to randomly pick a winner. Useful for conducting contests and giveaways.</p>
-  {% if logged_in %}
-    <p>Hey there. Looks like you're logged in already.</p>
-    <a href="{{ url_for('profile') }}" class="btn">Profile</a>
-    <p>Pick a winner from your list of followers:</p>
-    <a href="/followers" class="btn">Followers</a>
-    <p>Pick a winner from your retweets:</p>
-    <a href="retweets" class="btn">Retweets</a>
-    <p></p>
-    <a href="/logout" class="btn">logout</a>
-  {% else %}
-    <p>Please login to continue:</p>
-    <p>
-      <a href="/auth/twitter" class="btn">Sign in to Twitter</a>
-    </p>
-  {% endif %}
+  
+		<div class="container">
+			<div class="row">
+        <div class="col-md-4">
+          <h2>Profile</h2>
+          <p>See your relavent profile information.</p>
+          <p><a class="btn btn-default" href="{{ url_for('profile') }}" role="button">View details &raquo;</a></p>
+       </div>
+			  <div class="col-md-4">
+			    <h2>Followers</h2>
+			    <p>Pick a winner from your list of followers. Currently limited to 3000 followers.</p>
+			    <p><a class="btn btn-default" href="/followers" role="button">View details &raquo;</a></p>
+			  </div>
+			  <div class="col-md-4">
+			    <h2>Retweets</h2>
+			    <p>Pick a winner from your retweets. Select a recent retweet and pick a winner from those that retweeted you.</p>
+			    <p><a class="btn btn-default" href="/retweets" role="button">View details &raquo;</a></p>
+			 </div>
+			</div>
+		</div>
+
 {% endblock %}

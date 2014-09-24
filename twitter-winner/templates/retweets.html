@@ -1,15 +1,6 @@
 {% extends "layout.html" %}
 
 {% block main %}
-  <div class="media">
-    <div class="img avatar">
-      <img src="{{ user.avatar_url }}">
-    </div>
-    <div class="body">
-      <h1 style="margin-top: 0; padding-top: 0">{{ user.name }}</h1>
-      <p><a href="{{ user.link }}" target="_blank" rel="nofollow">{{ user.link }}</a></p>
-    </div>
-  </div>
 
   {% if winner %}
 	  <h2>Winner</h2>
@@ -39,7 +30,4 @@
     </table>
   {% endif %}
   
-  <p style="margin-top: 2em;">
-    <a href="/logout" class="btn">logout</a>
-  </p>
 {% endblock %}
