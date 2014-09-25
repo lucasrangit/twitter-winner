@@ -9,7 +9,7 @@
   <meta name="description" content="Conduct contest drawings based on your Twitter data.">
   <meta name="author" content="robotnyc.com">
   <link rel="stylesheet" href="/css/jumbotron.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/readable/bootstrap.min.css">
 </head>
 
 <body>
@@ -46,8 +46,8 @@
 				    <div class="img avatar">
 				      <img src="{{ user.avatar_url }}">
 				    </div>
-			      <h1>Hi, <a href="{{ user.link }}" target="_blank" rel="nofollow">{{ user.name }}</a>!</h1>
 			    </div>
+		      <h1>Hi, <a href="{{ user.link }}" target="_blank" rel="nofollow">{{ user.name }}</a>!</h1>
         {% else %}
           <h1>Tweet, win!</h1>
         {% endif %}
