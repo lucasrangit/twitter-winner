@@ -1,3 +1,4 @@
+{% set active_page = active_page|default("index") %}
 <!doctype html>
 <html >
 <head>
@@ -27,10 +28,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 	        <ul class="nav navbar-nav">
-	          <li class="active"><a href="/">Home</a></li>
-	          <li class=""><a href="/profile">Proflie</a></li>
-	          <li class=""><a href="/followers">Followers</a></li>
-	          <li class=""><a href="/retweets">Retweets</a></li>
+	          <li class="{% if active_page == 'index' %}active{% endif %}"><a href="/">Home</a></li>
+	          <li class="{% if active_page == 'profile' %}active{% endif %}"><a href="/profile">Proflie</a></li>
+	          <li class="{% if active_page == 'followers' %}active{% endif %}"><a href="/followers">Followers</a></li>
+	          <li class="{% if active_page == 'retweets' %}active{% endif %}"><a href="/retweets">Retweets</a></li>
 		      </ul>
         </div>
       </div>
