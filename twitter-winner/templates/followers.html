@@ -7,16 +7,39 @@
     <div class="alert alert-danger" role="alert">Your list of following is incomplete due to Twitter API rate limitations!</div>
   {% endif %}
 
-  <h2>Winner</h2>
-  <ul>
-      <li>{{ winner.screen_name }}</li>
-  </ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+			  <h2>Winner</h2>
+		    <ul class="list-group">
+	        <li class="list-group-item">
+	          <div class="media">
+		          <div class="media-object pull-left">
+		            <img src="{{ winner.profile_image_url_https }}">
+		          </div>
+	          </div>
+	          <div class="media-body">
+	            <a href="//twitter.com/{{ winner.screen_name }}" target="_blank" rel="nofollow">@{{ winner.screen_name }}</a> - {{ winner.name }}
+	          </div>
+	        </li>
+	      </ul>
+	    </div>
+    </div>
+   </div>
+	   
+  <div class="container">
+	  <div class="row">
+      <div class="col-md-4">
+			  <h2>Followers</h2>
+			  <ol class="">
+		      {% for follower in followers %}
+		        <li class="">
+		         <a href="//twitter.com/{{ follower.screen_name }}" target="_blank" rel="nofollow">@{{ follower.screen_name }}</a> - {{ follower.name }}
+	         </li>
+		      {% endfor %}
+			  </ol>
+		  </div>
+	  </div>
+  </div>
 
-  <h2>Followers</h2>
-  <ol>
-      {% for follower in followers %}
-        <li>{{ follower.screen_name }}</li>
-      {% endfor %}
-  </ol>
-  
 {% endblock %}

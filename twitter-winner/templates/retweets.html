@@ -4,15 +4,34 @@
 {% block main %}
 
   {% if winner %}
-	  <h2>Winner</h2>
-	  <ul>
-	      <li>{{ winner.screen_name }}</li>
-	  </ul>
+	  <div class="container">
+	    <div class="row">
+	      <div class="col-md-4">
+	        <h2>Winner</h2>
+	        <ul class="list-group">
+	          <li class="list-group-item">
+	            <div class="media">
+	              <div class="media-object pull-left">
+	                <img src="{{ winner.profile_image_url_https }}">
+	              </div>
+	            </div>
+	            <div class="media-body">
+	              <a href="//twitter.com/{{ winner.screen_name }}" target="_blank" rel="nofollow">@{{ winner.screen_name }}</a> - {{ winner.name }}
+	            </div>
+	          </li>
+	        </ul>
+	      </div>
+	    </div>
+    </div>
 
-	  <h2>Winning Retweet</h2>
-	  <ul>
-	      <li>{{ retweet.text }}</li>
-	  </ul>
+    <div class="container">
+      <div class="row">
+			  <h2>Winning Retweet</h2>
+			  <ul class="list-group">
+			      <li class="list-group-item">{{ retweet.text }}</li>
+			  </ul>
+		  </div>
+	  </div>
   {% endif %}
 
   {% if retweets %}
