@@ -3,24 +3,46 @@
 
 {% block main %}
   
-		<div class="container">
-			<div class="row">
-        <div class="col-md-4">
-          <h2>Profile</h2>
-          <p>See your relavent profile information.</p>
-          <p><a class="btn btn-default" href="{{ url_for('profile') }}" role="button">View details &raquo;</a></p>
-       </div>
-			  <div class="col-md-4">
-			    <h2>Followers</h2>
-			    <p>Pick a winner from your list of followers. Currently limited to 3000 followers.</p>
-			    <p><a class="btn btn-default" href="/followers" role="button">View details &raquo;</a></p>
-			  </div>
-			  <div class="col-md-4">
-			    <h2>Retweets</h2>
-			    <p>Pick a winner from your retweets. Select a recent retweet and pick a winner from those that retweeted you.</p>
-			    <p><a class="btn btn-default" href="/retweets" role="button">View details &raquo;</a></p>
-			 </div>
-			</div>
-		</div>
+<div class="jumbotron">
+  <div class="container">
+    {% if logged_in %}
+      <div class="media">
+        <div class="img avatar">
+          <img src="{{ user.avatar_url }}">
+        </div>
+      </div>
+      <h1>Hi, <a href="{{ user.link }}" target="_blank" rel="nofollow">{{ user.name }}</a>!</h1>
+    {% else %}
+      <h1>Tweet, win!</h1>
+    {% endif %}
+    <p>Use your Twitter data to randomly pick a winner. This app is for conducting contests and giveaways.</p>
+    <p>None of your data or that of your followers is saved or shared.</p>
+    {% if logged_in %}
+      <p><a class="btn btn-default btn-lg" role="button" href="/logout">Logout</a></p>
+    {% else %}
+      <p><a class="btn btn-primary btn-lg" role="button" href="/auth/twitter">Sign in with Twitter &raquo;</a></p>
+    {% endif %}
+  </div>
+</div>
+  
+<div class="container">
+	<div class="row">
+      <div class="col-md-4">
+        <h2>Profile</h2>
+        <p>See your relavent profile information.</p>
+        <p><a class="btn btn-default" href="{{ url_for('profile') }}" role="button">View details &raquo;</a></p>
+     </div>
+	  <div class="col-md-4">
+	    <h2>Followers</h2>
+	    <p>Pick a winner from your list of followers. Currently limited to 3000 followers.</p>
+	    <p><a class="btn btn-default" href="/followers" role="button">View details &raquo;</a></p>
+	  </div>
+	  <div class="col-md-4">
+	    <h2>Retweets</h2>
+	    <p>Pick a winner from your retweets. Select a recent retweet and pick a winner from those that retweeted you.</p>
+	    <p><a class="btn btn-default" href="/retweets" role="button">View details &raquo;</a></p>
+	 </div>
+	</div>
+</div>
 
 {% endblock %}
