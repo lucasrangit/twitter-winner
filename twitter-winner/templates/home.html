@@ -15,8 +15,8 @@
     {% else %}
       <h1>Tweet, win!</h1>
     {% endif %}
-    <p>Use your Twitter data to randomly pick a winner. This app is for conducting contests and giveaways.</p>
-    <p>None of your data or that of your followers is saved or shared.</p>
+    <p>Use your Twitter data to randomly pick a winner. This is a free and secure app is for conducting contests and giveaways.</p>
+    <p>No data is saved or shared.</p>
     {% if logged_in %}
       <p><a class="btn btn-default btn-lg" role="button" href="/logout">Logout</a></p>
     {% else %}
@@ -24,23 +24,21 @@
     {% endif %}
   </div>
 </div>
-  
+
 <div class="container">
+  <div class="row">
+    <h2>Start by selecting from the following:</h2>
+  </div>
 	<div class="row">
-      <div class="col-md-4">
-        <h2>Profile</h2>
-        <p>See your relavent profile information.</p>
-        <p><a class="btn btn-default" href="{{ url_for('profile') }}" role="button">View details &raquo;</a></p>
-     </div>
 	  <div class="col-md-4">
 	    <h2>Followers</h2>
-	    <p>Pick a winner from your list of followers. Currently limited to 3000 followers.</p>
-	    <p><a class="btn btn-default" href="/followers" role="button">View details &raquo;</a></p>
+	    <p>Pick a winner from your followers. Currently limited to 3000 followers.</p>
+	    <p><a class="btn btn-default" href="/followers" role="button">Pick a Winner! &raquo;</a></p>
 	  </div>
 	  <div class="col-md-4">
 	    <h2>Retweets</h2>
-	    <p>Pick a winner from your retweets. Select a recent retweet and pick a winner from those that retweeted you.</p>
-	    <p><a class="btn btn-default" href="/retweets" role="button">View details &raquo;</a></p>
+	    <p>Pick a winner from your retweets. Select a recent retweet and pick a winner from those that retweeted it.</p>
+	    <p><a class="btn btn-default" href="/retweets" role="button">Pick a Winner! &raquo;</a></p>
 	 </div>
 	</div>
 </div>
