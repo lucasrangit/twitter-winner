@@ -206,7 +206,8 @@ class SearchesHandler(BaseRequestHandler):
           print search.query
           statuses = list()
           tweeters = list()
-          for status in api.search(q=search.query, count=10):
+          # max 100 https://dev.twitter.com/rest/reference/get/search/tweets
+          for status in api.search(q=search.query, count=100):
             statuses.append(status)
             tweeters.append(status.user)
           random_number = random.randint(0, len(tweeters)-1)
