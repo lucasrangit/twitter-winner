@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% set active_page = "searches" %}
+
+{% block main %}
+
+  {% if winner %}
+	  <div class="container">
+	    <div class="row">
+	      <div class="col-md-4">
+	        <h2>We have a winner!</h2>
+	        <ul class="list-group">
+	          <li class="list-group-item">
+	            <div class="media">
+	              <div class="media-object pull-left">
+	                <img src="{{ winner.profile_image_url_https }}">
+	              </div>
+	            </div>
+	            <div class="media-body">
+	              <a href="//twitter.com/{{ winner.screen_name }}" target="_blank" rel="nofollow">@{{ winner.screen_name }}</a> - {{ winner.name }}
+	            </div>
+	          </li>
+	        </ul>
+	      </div>
+	    </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+			  <h2>Winning Tweet</h2>
+			  <ul class="list-group">
+			      <li class="list-group-item">{{ tweet.text }}</li>
+			  </ul>
+		  </div>
+	  </div>
+
+  {% elif searches|length == 0 %}
+  <div class="container">
+    <div class="row">
+      </br>
+      <p>You have no searches saved. Start by building a search query using <a href="https://twitter.com/search-advanced">https://twitter.com/search-advanced</a>. If it looks good, save it (look for the Save menu item under "More options").</p>
+    </div>
+  </div>
+
+  {% elif searches %}
+  <div class="container">
+    <div class="row">
+      <h2>Next, pick a search query:</h2>
+    </div>
+  </div>
+  <div class="row">
+		<table class="table table-hover">
+		 <thead>
+		 <tr>
+		    <th>#</th>
+		    <th>Created</th>
+		    <th>Text</th>
+		 </tr>
+		</thead>
+		  <tbody>
+		   {% for search in searches %}
+			 <tr>
+			   <td><a href="/searches?id={{search.id}}">{{loop.index}}</a>
+		     <td style="padding-right: 5px">{{ search.created_at }}</td>
+		     <td>{{ search.query }}</td>
+		  </tr>
+		  {% endfor %}
+		  </tbody>
+    </table>
+  </div>
+  {% endif %}
+  
+{% endblock %}

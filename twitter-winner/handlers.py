@@ -177,6 +177,49 @@ class RetweetsHandler(BaseRequestHandler):
     else:
       self.redirect('/')
 
+class SearchesHandler(BaseRequestHandler):
+  def get(self):
+    """Handles GET /searches"""    
+    if self.logged_in:
+      user = self.current_user
+      search_id = self.request.get("id")
+
+      # OAuth process, using the keys and tokens
+      auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+      auth.set_access_token(user.access_token, user.access_token_secret)
+        
+      # Creation of the actual interface, using authentication
+      api = tweepy.API(auth)
+      
+      if not search_id:
+          searches_list = list()
+          for search in api.saved_searches():
+              searches_list.append(search)
+          
+          self.render('searches.html', {
+            'user': user,
+            'session': self.auth.get_user_by_session(),
+            'searches': searches_list,
+          })
+      else:
+          search = api.get_saved_search(search_id)
+          print search.query
+          statuses = list()
+          tweeters = list()
+          for status in api.search(q=search.query, count=10):
+            statuses.append(status)
+            tweeters.append(status.user)
+          random_number = random.randint(0, len(tweeters)-1)
+          winner = tweeters[random_number]
+    
+          self.render('searches.html', {
+            'user': user,
+            'session': self.auth.get_user_by_session(),
+            'winner': winner,
+            'tweet': statuses[random_number],
+          })
+    else:
+      self.redirect('/')
 
 class AuthHandler(BaseRequestHandler, SimpleAuthHandler):
   """Authentication handler for OAuth 2.0, 1.0(a) and OpenID."""

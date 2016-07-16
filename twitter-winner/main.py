@@ -57,6 +57,7 @@ routes = [
   Route('/', handler='handlers.RootHandler'),
   Route('/followers', handler='handlers.FollowersHandler'),
   Route('/retweets', handler='handlers.RetweetsHandler'),
+  Route('/searches', handler='handlers.SearchesHandler'),
   Route('/profile', handler='handlers.ProfileHandler', name='profile'),
   
   Route('/logout', handler='handlers.AuthHandler:logout', name='logout'),
