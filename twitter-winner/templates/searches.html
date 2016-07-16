@@ -28,7 +28,9 @@
       <div class="row">
 			  <h2>Winning Tweet</h2>
 			  <ul class="list-group">
-			      <li class="list-group-item">{{ tweet.text }}</li>
+					<li class="list-group-item">{{ tweet.text }}</li>
+					<li class="list-group-item">{{ tweet.created_at }}</li>
+					<li class="list-group-item"><a href="http://twitter.com/{{ winner.screen_name }}/status/{{ tweet.id }}">http://twitter.com/{{ winner.screen_name }}/status/{{ tweet.id }}</a></li>
 			  </ul>
 		  </div>
 	  </div>
