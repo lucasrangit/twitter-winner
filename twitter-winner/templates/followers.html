@@ -4,13 +4,14 @@
 {% block main %}
   
   {% if incomplete_list %}
-    <div class="alert alert-danger" role="alert">Your list of following is incomplete due to Twitter API rate limitations!</div>
+	<div class="alert alert-danger" role="alert">Your list of followers is incomplete due to Twitter API rate limitations!</div>
   {% endif %}
 
+  {% if winner %}
   <div class="container">
     <div class="row">
       <div class="col-md-4">
-			  <h2>We have a winner!</h2>
+			<h2>We have a winner!</h2>
 		    <ul class="list-group">
 	        <li class="list-group-item">
 	          <div class="media">
@@ -25,7 +26,10 @@
 	      </ul>
 	    </div>
     </div>
-   </div>
+  </div>
+  {% else %}
+  	<div class="alert alert-warning" role="alert">Your list of followers is empty.</div>
+  {% endif %}
 	   
   <div class="container">
 	  <div class="row">
@@ -34,8 +38,8 @@
 			  <ol class="">
 		      {% for follower in followers %}
 		        <li class="">
-		         <a href="//twitter.com/{{ follower.screen_name }}" target="_blank" rel="nofollow">@{{ follower.screen_name }}</a> - {{ follower.name }}
-	         </li>
+		          <a href="//twitter.com/{{ follower.screen_name }}" target="_blank" rel="nofollow">@{{ follower.screen_name }}</a> - {{ follower.name }}
+			    </li>
 		      {% endfor %}
 			  </ol>
 		  </div>

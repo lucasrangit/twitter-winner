@@ -124,10 +124,12 @@ class FollowersHandler(BaseRequestHandler):
           limits = api.rate_limit_status('statuses')
           logging.info(limits)
           incomplete_list = True
-          
-      random_number = random.randint(0, len(followers)-1)
-      winner = followers[random_number]
 
+      winner = False
+      if len(followers) > 0:    
+        random_number = random.randint(0, len(followers)-1)
+        winner = followers[random_number]
+      
       self.render('followers.html', {
         'user': user,
         'session': self.auth.get_user_by_session(),
