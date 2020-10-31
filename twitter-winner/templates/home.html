@@ -2,7 +2,7 @@
 {% set active_page = "index" %}
 
 {% block main %}
-  
+
 <div class="jumbotron">
   <div class="container">
     {% if logged_in %}
@@ -15,7 +15,7 @@
     {% else %}
       <h1>Tweet, win!</h1>
     {% endif %}
-    <p>Use your Twitter data to randomly pick a winner. This is a free and secure app is for conducting contests and giveaways.</p>
+    <p>Use your Twitter data to randomly pick a winner. This free and secure app is for conducting contests and giveaways.</p>
     <p>No data is saved or shared.</p>
     {% if logged_in %}
       <p><a class="btn btn-default btn-lg" role="button" href="/logout">Logout</a></p>
