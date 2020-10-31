@@ -4,7 +4,7 @@
 {% block main %}
 
   {% if winner %}
-	  <div class="container">
+	<div class="container">
 	    <div class="row">
 	      <div class="col-md-4">
 	        <h2>We have a winner!</h2>
@@ -25,45 +25,48 @@
     </div>
 
     <div class="container">
-      <div class="row">
-			  <h2>Winning Retweet</h2>
-			  <ul class="list-group">
-			      <li class="list-group-item">{{ retweet.text }}</li>
-			  </ul>
-		  </div>
-	  </div>
-  {% endif %}
-
-  {% if retweets %}
-	{% if retweets|length > 0 %}
-	<div class="container">
-		<div class="row">
-		<h2>Next, pick a retweet:</h2>
+      	<div class="row">
+			<h2>Winning Retweet</h2>
+			<ul class="list-group">
+				<li class="list-group-item">{{ retweet.text }}</li>
+			</ul>
 		</div>
 	</div>
-	<div class="row">
-			<table class="table table-hover">
-			<thead>
-			<tr>
-				<th>#</th>
-				<th>Count</th>
-				<th>Text</th>
-			</tr>
-			</thead>
-			<tbody>
-			{% for retweet in retweets %}
-				<tr>
-				<td><a href="/retweets?id={{retweet.id}}">{{loop.index}}</a>
-				<td style="padding-right: 5px">{{ retweet.retweet_count }}</td>
-				<td>{{ retweet.text }}</td>
-			</tr>
-			{% endfor %}
-			</tbody>
-		</table>
-	</div>
-	{% else %}
+
+  {% elif retweets|length == 0 %}
+	<div class="container">
+	  <div class="row">
+		</br>
 		<div class="alert alert-warning" role="alert">Your list of retweets is empty.</div>
-    {% endif %}
+	  </div>
+	</div>
+
+  {% elif retweets %}
+	<div class="container">
+		<div class="row">
+	    	<h2>Retweets</h2>
+	  	</div>
+		<div class="row">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Count</th>
+						<th>Text</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for retweet in retweets %}
+					<tr>
+					<td><a href="/retweets?id={{retweet.id}}">{{loop.index}}</a>
+					<td style="padding-right: 5px">{{ retweet.retweet_count }}</td>
+					<td>{{ retweet.text }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
   {% endif %}
 
 {% endblock %}
