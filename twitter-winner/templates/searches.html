@@ -3,6 +3,10 @@
 
 {% block main %}
 
+	{% if incomplete_list %}
+		<div class="alert alert-danger" role="alert">Your list of searches is incomplete due to Twitter API rate limits!</div>
+	{% endif %}
+
   {% if winner %}
 	  <div class="container">
 	    <div class="row">
