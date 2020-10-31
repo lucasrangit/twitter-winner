@@ -27,21 +27,23 @@
 	    </div>
     </div>
   </div>
-  {% else %}
-  	<div class="alert alert-warning" role="alert">Your list of followers is empty.</div>
   {% endif %}
 	   
   <div class="container">
 	  <div class="row">
       <div class="col-md-4">
 			  <h2>Followers</h2>
-			  <ol class="">
-		      {% for follower in followers %}
-		        <li class="">
-		          <a href="//twitter.com/{{ follower.screen_name }}" target="_blank" rel="nofollow">@{{ follower.screen_name }}</a> - {{ follower.name }}
-			    </li>
-		      {% endfor %}
-			  </ol>
+			  {% if followers|length > 0 %}
+				<ol class="">
+				{% for follower in followers %}
+					<li class="">
+					<a href="//twitter.com/{{ follower.screen_name }}" target="_blank" rel="nofollow">@{{ follower.screen_name }}</a> - {{ follower.name }}
+					</li>
+				{% endfor %}
+				</ol>
+			  {% else %}
+				<div class="alert alert-warning" role="alert">Your list of followers is empty.</div>
+			  {% endif %}
 		  </div>
 	  </div>
   </div>
