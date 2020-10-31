@@ -158,7 +158,7 @@ class RetweetsHandler(BaseRequestHandler):
           retweets_list = list()
           incomplete_list = False
           try:
-            for tweet in api.retweets_of_me():
+            for tweet in api.retweets_of_me(count=100):
                 retweets_list.append(tweet)
           except TweepError as e:
             logging.error(e)
