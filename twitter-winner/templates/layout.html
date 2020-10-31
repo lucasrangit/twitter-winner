@@ -6,7 +6,7 @@
   <title>Twitter Winner</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Conduct contest drawings based on your Twitter data.">
+  <meta name="description" content="Conduct contests and giveaways using your Twitter data.">
   <meta name="author" content="robotnyc.com">
   <link rel="stylesheet" href="/css/jumbotron.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/readable/bootstrap.min.css">
@@ -41,7 +41,7 @@
   <div role="main" class="container" style="margin-bottom: 2em;">
 
     {% block main %}{% endblock %}
-    
+
     {% for data, name in flashes %}
       <h2>{{ name }}</h2>
       <table>
@@ -55,15 +55,15 @@
         </tbody>
       </table>
     {% endfor %}
-    
+
   </div>
-  
+
   <hr>
-  
+
   <footer>
     <div class="container">
 	    <nav><ul class="">
-	      <li>Send feedback, contribute, or audit the source code at: 
+	      <li>Send feedback, contribute, or audit the source code at:
 	        <a href="//github.com/lucasrangit/twitter-winner" target="_blank"
 	           title="Source code">
 	          github.com/lucasrangit/twitter-winner
@@ -72,7 +72,7 @@
 	    </ul></nav>
     </div>
   </footer>
-  
+
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script>
