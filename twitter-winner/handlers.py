@@ -156,13 +156,21 @@ class RetweetsHandler(BaseRequestHandler):
 
       if not tweet_id:
           retweets_list = list()
-          for tweet in api.retweets_of_me():
-              retweets_list.append(tweet)
+          incomplete_list = False
+          try:
+            for tweet in api.retweets_of_me():
+                retweets_list.append(tweet)
+          except TweepError as e:
+            logging.error(e)
+            limits = api.rate_limit_status('statuses')
+            logging.info(limits)
+            incomplete_list = True
 
           self.render('retweets.html', {
             'user': user,
             'session': self.auth.get_user_by_session(),
             'retweets': retweets_list,
+            'incomplete_list': incomplete_list,
           })
       else:
           retweet = api.get_status(tweet_id)

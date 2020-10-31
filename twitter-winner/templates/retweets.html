@@ -3,6 +3,11 @@
 
 {% block main %}
 
+	{% if incomplete_list %}
+		</br>
+		<div class="alert alert-danger" role="alert">Your list of retweets is incomplete due to Twitter API rate limits! Try again in later (up to 15 minutes).</div>
+	{% endif %}
+
   {% if winner %}
 	<div class="container">
 	    <div class="row">
