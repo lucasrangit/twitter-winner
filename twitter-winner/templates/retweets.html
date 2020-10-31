@@ -35,31 +35,35 @@
   {% endif %}
 
   {% if retweets %}
-  <div class="container">
-    <div class="row">
-      <h2>Next, pick a retweet:</h2>
-    </div>
-  </div>
-  <div class="row">
-		<table class="table table-hover">
-		 <thead>
-		 <tr>
-		    <th>#</th>
-		    <th>Count</th>
-		       <th>Text</th>
-		 </tr>
-		</thead>
-		  <tbody>
-		   {% for retweet in retweets %}
-			 <tr>
-			   <td><a href="/retweets?id={{retweet.id}}">{{loop.index}}</a>
-		       <td style="padding-right: 5px">{{ retweet.retweet_count }}</td>
-		     <td>{{ retweet.text }}</td>
-		  </tr>
-		  {% endfor %}
-		  </tbody>
-    </table>
-  </div>
+	{% if retweets|length > 0 %}
+	<div class="container">
+		<div class="row">
+		<h2>Next, pick a retweet:</h2>
+		</div>
+	</div>
+	<div class="row">
+			<table class="table table-hover">
+			<thead>
+			<tr>
+				<th>#</th>
+				<th>Count</th>
+				<th>Text</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for retweet in retweets %}
+				<tr>
+				<td><a href="/retweets?id={{retweet.id}}">{{loop.index}}</a>
+				<td style="padding-right: 5px">{{ retweet.retweet_count }}</td>
+				<td>{{ retweet.text }}</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% else %}
+		<div class="alert alert-warning" role="alert">Your list of retweets is empty.</div>
+    {% endif %}
   {% endif %}
-  
+
 {% endblock %}
