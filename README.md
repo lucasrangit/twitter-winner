@@ -8,7 +8,10 @@ Use your Twitter data to randomly pick a winner. Useful for conducting contests 
 
 ## Deploy
 
-1. `~/bin/google_appengine/appcfg.py -A twitter-winner update twitter-winner/`
+1. Check current version: `gcloud app versions list`
+1. Deploy new version to test URL: `gcloud app deploy --no-promote --version X`
+1. Test new version.
+1. Deploy new version to production URL: `gcloud app deploy --version X`
 
 ## Secrets
 
