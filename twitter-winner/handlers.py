@@ -173,16 +173,27 @@ class RetweetsHandler(BaseRequestHandler):
             'incomplete_list': incomplete_list,
           })
       else:
-          retweet = api.get_status(tweet_id)
-          retweeters = api.retweeters(tweet_id)
-          random_number = random.randint(0, len(retweeters)-1)
-          winner = api.get_user(retweeters[random_number])
+          retweet = False
+          winner = False
+          incomplete_list = False
+          try:
+            retweet = api.get_status(tweet_id)
+            retweeters = api.retweeters(tweet_id)
+            if len(retweeters) > 0:
+              random_number = random.randint(0, len(retweeters)-1)
+              winner = api.get_user(retweeters[random_number])
+          except TweepError as e:
+            logging.error(e)
+            limits = api.rate_limit_status('statuses')
+            logging.info(limits)
+            incomplete_list = True
 
           self.render('retweets.html', {
             'user': user,
             'session': self.auth.get_user_by_session(),
             'winner': winner,
             'retweet': retweet,
+            'incomplete_list': incomplete_list,
           })
     else:
       self.redirect('/')
