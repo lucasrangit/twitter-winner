@@ -231,22 +231,33 @@ class SearchesHandler(BaseRequestHandler):
             'incomplete_list': incomplete_list,
           })
       else:
-          search = api.get_saved_search(search_id)
-          print search.query
-          statuses = list()
-          tweeters = list()
-          # max 100 https://dev.twitter.com/rest/reference/get/search/tweets
-          for status in api.search(q=search.query, count=100):
-            statuses.append(status)
-            tweeters.append(status.user)
-          random_number = random.randint(0, len(tweeters)-1)
-          winner = tweeters[random_number]
+          winner = False
+          tweet = False
+          incomplete_list = False
+          try:
+            search = api.get_saved_search(search_id)
+            statuses = list()
+            tweeters = list()
+            # max 100 https://dev.twitter.com/rest/reference/get/search/tweets
+            for status in api.search(q=search.query, count=100):
+              statuses.append(status)
+              tweeters.append(status.user)
+            if len(tweeters) > 0:
+              random_number = random.randint(0, len(tweeters)-1)
+              winner = tweeters[random_number]
+              tweet = statuses[random_number]
+          except TweepError as e:
+            logging.error(e)
+            limits = api.rate_limit_status('statuses')
+            logging.info(limits)
+            incomplete_list = True
 
           self.render('searches.html', {
             'user': user,
             'session': self.auth.get_user_by_session(),
             'winner': winner,
-            'tweet': statuses[random_number],
+            'tweet': tweet,
+            'incomplete_list': incomplete_list,
           })
     else:
       self.redirect('/')
