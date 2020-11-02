@@ -17,7 +17,7 @@ Use your Twitter data to randomly pick a winner. Useful for conducting contests 
 
 This app requires that you create a `secrets.py` file with the following contents. For security, the file is ignored by git.
 
-```
+```python
 # This is a session secret key used by webapp2 framework.
 # Get 'a random and long string' from here:
 # http://clsc.net/tools/random-string-generator.php
